@@ -1,0 +1,186 @@
+{%  load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="shortcut icon" type="image/jpg" href="./images/a.jpg"> 
+<title>Payroll management system</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'js/font-awesome/css/font-awesome.min.css' %}">
+<style type="text/css" media="print">
+.footerr,.nav, .btn{
+    display: none;
+}
+*{
+    top: 0px;
+    font-size: 12px;
+}
+</style>
+<link rel="stylesheet" type="text/css" href=" {% static 'css/custom-styles.css' %}">
+<script type="text/javascript" src="{% static 'bootstrap/js/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/validate.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/main.js' %}"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    $('.searchMsg').submit(function(e){
+            e.preventDefault();
+            searchMsg("");
+        });
+    $('#searchMsg').keyup(function(){
+          searchMsg("");
+    }); 
+});   
+</script>
+</head> 
+<body>
+<div class="container">
+    <header>
+        <div class="row outer visible-md visible-lg title"><h1 style="font-weight:bold;"> PAYROLL MANAGEMENT SYSTEM </h1></div>
+    </header>
+    <div class="row">
+        <nav class="navbar navbar-default">
+            
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <span class="navbar-brand">Payroll system</span>
+                </div>
+                <div class="navbar-collapse collapse ">
+                    <ul class="nav navbar-nav navbar-right menus">
+                        <li ><a href="{%  url 'home' %}"><i class="fa fa-home"></i> Home</a></li>
+                        <li ><a href="{%  url 'payment' %}"><i class="fa fa-money"></i> Payments</a></li>
+                        <li ><a href="{%  url 'addemployee' %}"><i class="fa fa-user-plus"></i> Add employee</a></li>
+                        <li ><a href="{%  url 'employees' %}"><i class="fa fa-users"></i> Employees</a></li>
+                        <li ><a href="{%  url 'message' %}"><i class="fa fa-envelope-o"></i> Messages</a></li>
+                        <li ><a href="{%  url 'setting' %}"><span></span><i class="fa fa-sliders"></i> System setup</a></li>
+                        <li>
+                            <a href="#" data-toggle="dropdown" data-target="dropdown-menu" data-placement="right"><i class="fa fa-user-secret"></i>{{user.email}}<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{%  url 'about' %}"><i class="fa fa-user"></i> &nbsp;About you</a></li>
+                                <li><a href="{%  url 'changepassword' %}"><i class="fa fa-key"></i> &nbsp;Change password</a></li>
+                                 <li class="divider"></li>
+                                 <li><a class="tip" title="Logout" href="{%  url 'logout' %}"><i class="fa fa-sign-out"></i> &nbsp;Logout</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+        </nav>
+    </div>
+</div>
+<div class="container">
+    <div class="row body outer">
+        <div class="col-md-12" data-title="Add new employee"><h4 class="center">Edit employees</h4><hr>
+            <form class="form-horizontal col-md-6 col-md-push-3 col-md-pull-3" action="{% url 'edit' id=data.id %}" id="updateEmployee" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <fieldset>
+                    <legend>Personal information</legend>
+                    <div class="form-group">
+                        <div class="col-md-4"><label>Names</label></div>
+                        <div class="col-md-4"><input type="text" name="firstname" class="form-control" placeholder="Firstname..." value="{{data.fname}}" required/></div>
+                        <div class="col-md-4"><input type="text" name="lastname" class="form-control" placeholder="Lastname..." value="{{data.lname}}" required/></div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4"><label>Date of birth</label></div>
+                        <div class="col-md-8"><input type="date" name="dob" class="form-control" placeholder="DD/MM/YYYY" value="{{data.dob}}" required>
+                            {{data.dob}}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4"><label>Gender</label></div>
+                        <div class="col-md-8">
+                            <select name="gender" class="form-control">
+                                <option id="OK" value="Male" >Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4"><label>Telephone No</label></div>
+                        <div class="col-md-8"><input type="number" name="phonenumber" class="form-control" placeholder="Telephone No..." value="{{data.phonenumber}}" required/></div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4"><label>Email</label></div>
+                        <div class="col-md-8"><input type="email" name="email" class="form-control" placeholder="Email..." value="{{data.email}}"required/></div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4"><label>Address</label></div>
+                        <div class="col-md-8"><input type="text" name="address" class="form-control" placeholder="Address..." value="{{data.address}}" required/></div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4"><label>Photo</label></div>
+                        <div class="col-md-8"><input type="file" name="image" class="form-control" placeholder="Address..." value="{{data.image}}" required/>
+                        {{data.image}} 
+                        </div>
+                    </div>
+                </fieldset>
+                
+                <fieldset>
+                    <legend>Professional information</legend>
+                <div class="form-group">
+                    <div class="col-md-4"><label>Branch</label></div>
+                    <div class="col-md-8">
+                        <input type="text" name="branch" class="form-control" value="{{data.branch}}" required/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4"><label>Designation</label></div>
+                    <div class="col-md-8"><input type="text" name="designation" class="form-control" placeholder="Designation..." value="{{data.destination}}" required/></div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4"><label>Department</label></div>
+                    <div class="col-md-8">
+                        <input type="text" name="department" class="form-control" value="{{data.department}}" required/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4"><label>Date of joining</label></div>
+                    <div class="col-md-8"><input type="date" name="joindate" class="form-control" value="{{data.joineddate}}" required/>
+                        {{data.joineddate}}</div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4"><label>Salary</label></div>
+                    <div class="col-md-8"><input type="text" name="salary" class="form-control" placeholder="Salary (in Rwf)..." value="{{data.salary}}" required/></div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4"><label>Assurance</label></div>
+                    <div class="col-md-8"><input type="text" name="assurance" class="form-control" placeholder="Assurance (in Rwf)..." value="{{data.assurance}}" required/></div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4"><label>Bank Account No</label></div>
+                    <div class="col-md-8"><input type="number" name="bankaccountno" class="form-control" placeholder="Bank account number..." value="{{data.bankaccountno}}" required/></div>
+                </div>
+                
+            </fieldset>
+                <div class="form-group">
+                    <div class="col-md-2 col-md-push-5"><button type="submit" name="save" class="btn btn-success btn-sm"><i class="fa fa-save"></i>&nbsp; Edit</button></div>
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>
+     <div class="row text-center footerr">
+        <ul class="col-md-12 list-unstyled list-inline text-right">
+    <li ><a style="color:white;" href="">Contact us</a>&nbsp;&nbsp;|</li>
+    <li  ><a style="color:white;" href="#">About this software</a>&nbsp;&nbsp;|</li>
+            
+            
+            <li><a style="color:white;" href="">Logout</a></li>
+            </ul>
+    Uwiringiyimana jeannine
+    </div>
+    
+    <script type="text/javascript">
+    $(document).ready(function(){
+    $('.tip').tooltip();
+    var title=$('.active:last').data('title');
+    if (title!=null) {
+    document.title=title;
+    };
+    });
+    </script>
+    </body>
+    </html> 

@@ -1,0 +1,187 @@
+{%  load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="shortcut icon" type="image/jpg" href="./images/a.jpg"> 
+<title>Payroll management system</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'js/font-awesome/css/font-awesome.min.css' %}">
+<style type="text/css" media="print">
+.footerr,.nav, .btn{
+    display: none;
+}
+*{
+    top: 0px;
+    font-size: 12px;
+}
+</style>
+<link rel="stylesheet" type="text/css" href=" {% static 'css/custom-styles.css' %}">
+<script type="text/javascript" src="{% static 'bootstrap/js/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/validate.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/main.js' %}"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    $('.searchMsg').submit(function(e){
+            e.preventDefault();
+            searchMsg("");
+        });
+    $('#searchMsg').keyup(function(){
+          searchMsg("");
+    }); 
+});   
+</script>
+</head> 
+<body>
+<div class="container">
+    <header>
+        <div class="row outer visible-md visible-lg title"><h1 style="font-weight:bold;"> PAYROLL MANAGEMENT SYSTEM </h1></div>
+    </header>
+    <div class="row">
+        <nav class="navbar navbar-default">
+            
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <span class="navbar-brand">Payroll system</span>
+                </div>
+                <div class="navbar-collapse collapse ">
+                    <ul class="nav navbar-nav navbar-right menus">
+                        <li ><a href="{%  url 'home' %}"><i class="fa fa-home"></i> Home</a></li>
+                        <li ><a href="{%  url 'payment' %}"><i class="fa fa-money"></i> Payments</a></li>
+                        <li ><a href="{%  url 'addemployee' %}"><i class="fa fa-user-plus"></i> Add employee</a></li>
+                        <li ><a href="{%  url 'employees' %}"><i class="fa fa-users"></i> Employees</a></li>
+                        <li ><a href="{%  url 'message' %}"><i class="fa fa-envelope-o"></i> Messages</a></li>
+                        <li ><a href="{%  url 'setting' %}"><span></span><i class="fa fa-sliders"></i> System setup</a></li>
+                        <li>
+                            <a href="#" data-toggle="dropdown" data-target="dropdown-menu" data-placement="right"><i class="fa fa-user-secret"></i> <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{%  url 'about' %}"><i class="fa fa-user"></i> &nbsp;About you</a></li>
+                               <li><a href="{%  url 'changepassword' %}"><i class="fa fa-key"></i> &nbsp;Change password</a></li>
+                                <li class="divider"></li>
+                                <li><a class="tip" title="Logout" href="{%  url 'logout' %}"><i class="fa fa-sign-out"></i> &nbsp;Logout</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+        </nav>
+        </div>
+        <div class="row body outer">
+            <div class="col-md-2">
+                <div class="row aside-menu">
+                    <ul class="nav nav-pills nav-stacked">
+                        <li><a href="{% url 'payment' %}"><i class="fa fa-archive"></i> Account</a></li>
+                        <li ><a href="{% url 'payemployee' %}"><i class="fa fa-money"></i> Pay employees</a></li>
+                        <li><a href="{% url 'paydate' %}"><i class="fa fa-calendar"></i> Payment dates</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-10">
+            <div class="row pay-table">
+                <div class="col-md-12 text-center pay-h">
+                    <h4> Employees payments <small> <label>Today</label> <label class='text-success'>Payment date</label></small><hr></h4>
+                </div>
+            
+            
+                <img src="{% static '/image/auca.PNG' %}" width="8%">
+                ADVENTIST UNIVERSITY OF CENTRAL AFRICA</br>
+                HUYE DISTRICT</br>
+            
+                Account No:( 1234567890 )    BANK OF KIGALI, KIGALI BRANCH
+            
+            
+                <div class="col-md-12 text-center to-be-paid">
+                   
+                    <table class="table table-bordered table-hover table-collapse text-left payments">
+                        <thead><th>#</th><th><i class="fa fa-credit-card"></i> Account N<sup>o</sup></th><th><i class="fa fa-money"></i> Net salary</th><th><i class="fa fa-user"></i> Names</th><th><i class="fa fa-phone"></i> Phone</th><th><i class="fa fa-map-o"></i> Address</th></thead>
+                        <tbody>
+                           {% for x in data %}
+                           <tr><td>{{x.id}}</td><td class="acc">{{x.bankaccountno}}</td><td class="acc"><i class="text-muted">{{x.salary}}Rwf</i></td><td><a href="#" data-what="payment{{x.id}}" class="viewPay name" data-placement="right" title="View payment history of {{x.lname}}}">{{x.fname}} {{x.lname}}</a></td><td>{{x.phonenumber}}</td><td>{{x.address}}</td></tr>
+        
+                            <div id="payment{{x.id}}" class="modal fade">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title"> payment history</h4>
+                                                    </div>
+                                                    <div class="modal-body text-left  payment-view">
+                                                        <div class="well col-md-12">
+                                                            <div class="col-md-4"><img width="100%" src="../media/{{x.image}}"></div>
+                                                            <div class="col-md-8">
+                                                                <label>Account N<sup>o</sup></label>  <i>{{x.bankaccountno}}</i><br>
+                                                                <label>Names</label>  <i>{{x.fname}} {{x.lname}}</i><br>
+                                                                <label>Branch</label>  <i>{{x.branch}}</i><br>
+                                                                <label>Department</label>  <i>{{x.department}}</i>											
+                                                            </div>
+                                                        </div>
+                                                        <div class="well">
+                                                        <label>Salary</label>  <i>{{x.salary}}<b>Rwf</b> </i><br>
+                                                        <label class="text-info">Assurance</label>  <i>{{x.assurance}}<b>Rwf</b> </i><br>
+                                                        <span class="salary text-success"><label>Net salary</label>  <i><b>Rwf</b></i><span><br>										
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                            </div>
+                            {% endfor %}
+                           <tr class="total"><td  class="text-center" colspan="2">Total</td><td colspan="4">Rwf {{dsum.thedata}}</td></tr>
+                        
+                        </tbody>
+                    </table>
+            
+                </div>
+            
+
+
+                <div class="col-md-12 text-right">
+                    <button class="btn btn-default command-pay">Pay employees & Print their list to Bank</button>
+                   
+                        <h5 class="timer"><i class="fa fa-hourglass-half"></i> 
+                       
+                      </h5>
+                   
+                </div>
+
+
+
+            </div>
+            </div>
+
+
+
+
+
+
+           
+        </div> 
+</div> 
+   
+</div>
+
+    <div class="row text-center footerr">
+        <ul class="col-md-12 list-unstyled list-inline text-right">
+    <li ><a style="color:white;" href="">Contact us</a>&nbsp;&nbsp;|</li>
+    <li  ><a style="color:white;" href="#">About this software</a>&nbsp;&nbsp;|</li>
+            
+            
+            <li><a style="color:white;" href="">Logout</a></li>
+            </ul>
+    Uwiringiyimana jeannine
+    </div>
+    
+    </div>
+    <script type="text/javascript">
+    $(document).ready(function(){
+    $('.tip').tooltip();
+    var title=$('.active:last').data('title');
+    if (title!=null) {
+    document.title=title;
+    };
+    });
+    </script>
+    </body>
+    </html>

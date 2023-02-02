@@ -1,0 +1,157 @@
+{%  load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="shortcut icon" type="image/jpg" href="./images/a.jpg"> 
+<title>message</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'js/font-awesome/css/font-awesome.min.css' %}">
+<style type="text/css" media="print">
+.footerr,.nav, .btn{
+    display: none;
+}
+*{
+    top: 0px;
+    font-size: 12px;
+}
+</style>
+<link rel="stylesheet" type="text/css" href=" {% static 'css/custom-styles.css' %}">
+<script type="text/javascript" src="{% static 'bootstrap/js/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/validate.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/main.js' %}"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    $('.searchMsg').submit(function(e){
+            e.preventDefault();
+            searchMsg("");
+        });
+    $('#searchMsg').keyup(function(){
+          searchMsg("");
+    }); 
+});   
+</script>
+</head> 
+<body>
+<div class="container">
+    <header>
+        <div class="row outer visible-md visible-lg title"><h1 style="font-weight:bold;"> PAYROLL MANAGEMENT SYSTEM </h1></div>
+    </header>
+    <div class="row">
+        <nav class="navbar navbar-default">
+            
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <span class="navbar-brand">Payroll system</span>
+                </div>
+                <div class="navbar-collapse collapse ">
+                    <ul class="nav navbar-nav navbar-right menus">
+                        <li ><a href="{%  url 'home' %}"><i class="fa fa-home"></i> Home</a></li>
+                        <li ><a href="{%  url 'payment' %}"><i class="fa fa-money"></i> Payments</a></li>
+                        <li ><a href="{%  url 'addemployee' %}"><i class="fa fa-user-plus"></i> Add employee</a></li>
+                        <li ><a href="{%  url 'employees' %}"><i class="fa fa-users"></i> Employees</a></li>
+                        <li ><a href="{%  url 'message' %}"><i class="fa fa-envelope-o"></i> Messages</a></li>
+                        <li ><a href="{%  url 'setting' %}"><span></span><i class="fa fa-sliders"></i> System setup</a></li>
+                        <li>
+                            <a href="#" data-toggle="dropdown" data-target="dropdown-menu" data-placement="right"><i class="fa fa-user-secret"></i>{{user.username}} <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{%  url 'about' %}"><i class="fa fa-user"></i> &nbsp;About you</a></li>
+                               <li><a href="{%  url 'changepassword' %}"><i class="fa fa-key"></i> &nbsp;Change password</a></li>
+                                <li class="divider"></li>
+                                <li><a class="tip" title="Logout" href="{%  url 'logout' %}"><i class="fa fa-sign-out"></i> &nbsp;Logout</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+        </nav>
+       
+</div> 
+    <div class="row body outer">
+        <div class="col-md-2">
+            <div class="row aside-menu">
+                <ul class="nav nav-pills nav-stacked">
+                    <li><a href="{% url 'composemessage' %}"><i class="fa fa-pencil-square-o"></i>Compose</a></li>
+                    <li ><a href="{% url 'message' %}"><i class="fa fa-inbox"></i>Inbox</a></li>
+                    <li><a href="{% url 'sendmessage' %}"><i class="fa fa-send"></i>Sent</a></li>
+                </ul>
+            </div>
+        </div>
+      
+        <div class="row">
+            <form class="form-horizontal col-md-8 newMessage" method="post" action="{% url 'composemessage' %}">
+                {% csrf_token %}
+                <h4 class="center">New Message</h4><hr>
+                    
+                    <div class="form-group">
+                        <div class="col-md-4"><label>To</label></div>
+
+                       
+                        <div class="col-md-8"><input type="text" name="to" class="form-control" placeholder="To ..."required></div>
+                      
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4"><label>Title</label></div>
+                        <div class="col-md-8"><input type="text" name="title" id="title" class="form-control" placeholder="Message title..." required></div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4"><label>Message body</label></div>
+                        <div class="col-md-8">
+                            <textarea class="form-control" rows="10" name="body" placeholder="Message body ..." required></textarea>
+                        </div>
+                    </div>
+                <div class="form-group">
+                    <div class="col-md-2 col-md-push-5"><button type="submit" name="send" class="btn btn-success btn-sm"><i class="fa fa-send-o"></i> Send</button></div>
+                </div>
+            </form>
+        </div>
+        <div id="searchReceiver" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title">Who do you want to send message?</h4>
+                    </div>
+            <div class="modal-body">
+                <form role="form" class="form-horizontal">
+                <div class="form-group">
+                    <div class="col-md-4"><Label>Firstname,Lastname or Username</label></div>
+                    <div class="col-md-8"><input type="text" name="searchName" id="keyName" class="form-control" placeholder="Search by username,firstname or username "/></div>
+                </div>
+            </form>
+                <div class="text-info user-results"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+            </div>
+            </div>
+    </div>
+</div>
+    <div class="row text-center footerr">
+        <ul class="col-md-12 list-unstyled list-inline text-right">
+    <li ><a style="color:white;" href="">Contact us</a>&nbsp;&nbsp;|</li>
+    <li  ><a style="color:white;" href="#">About this software</a>&nbsp;&nbsp;|</li>
+            
+            
+            <li><a style="color:white;" href="">Logout</a></li>
+            </ul>
+    Uwiringiyimana jeannine
+    </div>
+  
+    </div>
+    <script type="text/javascript">
+    $(document).ready(function(){
+    $('.tip').tooltip();
+    var title=$('.active:last').data('title');
+    if (title!=null) {
+    document.title=title;
+    };
+    });
+    </script>
+    </body>
+    </html>

@@ -1,0 +1,137 @@
+{%  load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="shortcut icon" type="image/jpg" href="./images/a.jpg"> 
+<title>Payroll management system</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'js/font-awesome/css/font-awesome.min.css' %}">
+<style type="text/css" media="print">
+.footerr,.nav, .btn{
+    display: none;
+}
+*{
+    top: 0px;
+    font-size: 12px;
+}
+</style>
+<link rel="stylesheet" type="text/css" href=" {% static 'css/custom-styles.css' %}">
+<script type="text/javascript" src="{% static 'bootstrap/js/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/validate.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/main.js' %}"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    $('.searchMsg').submit(function(e){
+            e.preventDefault();
+            searchMsg("");
+        });
+    $('#searchMsg').keyup(function(){
+          searchMsg("");
+    }); 
+});   
+</script>
+</head> 
+<body>
+<div class="container">
+    <header>
+        <div class="row outer visible-md visible-lg title"><h1 style="font-weight:bold;"> PAYROLL MANAGEMENT SYSTEM </h1></div>
+    </header>
+    <div class="row">
+        <nav class="navbar navbar-default">
+            
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <span class="navbar-brand">Payroll system</span>
+                </div>
+                <div class="navbar-collapse collapse ">
+                    <ul class="nav navbar-nav navbar-right menus">
+                        <li ><a href="{%  url 'home' %}"><i class="fa fa-home"></i> Home</a></li>
+                        <li ><a href="{%  url 'payment' %}"><i class="fa fa-money"></i> Payments</a></li>
+                        <li ><a href="{%  url 'addemployee' %}"><i class="fa fa-user-plus"></i> Add employee</a></li>
+                        <li ><a href="{%  url 'employees' %}"><i class="fa fa-users"></i> Employees</a></li>
+                        <li ><a href="{%  url 'message' %}"><i class="fa fa-envelope-o"></i> Messages</a></li>
+                        <li ><a href="{%  url 'setting' %}"><span></span><i class="fa fa-sliders"></i> System setup</a></li>
+                        <li>
+                            <a href="#" data-toggle="dropdown" data-target="dropdown-menu" data-placement="right"><i class="fa fa-user-secret"></i>{{user.username}} <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{%  url 'about' %}"><i class="fa fa-user"></i> &nbsp;About you</a></li>
+                               <li><a href="{%  url 'changepassword' %}"><i class="fa fa-key"></i> &nbsp;Change password</a></li>
+                                <li class="divider"></li>
+                                <li><a class="tip" title="Logout" href="{%  url 'logout' %}"><i class="fa fa-sign-out"></i> &nbsp;Logout</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+        </nav>
+        </div>
+        <div class="row body outer">
+<div class="row">
+	<div class="col-md-12">
+		<div class="col-md-12 text-center"><h4>Full information of an employee<hr></h4></div>
+		<div class="col-md-4 text-center">
+			<a href="#"><img style="height:270px;width:270px;" src="../media/{{data.image}}" class="img-rounded img-responsive pic" /></a>
+		</div>
+		<div class="col-md-8">
+			<h4 class="active" data-title="">{{data.fname}} {{data.lname}}</h4>
+		</div>
+		<div class="col-md-4">
+			<table class="table table-hover table-striped">
+				<tr><tr><th>Phone No </th><td>{{data.phonenumber}}</td></tr></tr>
+				<tr><tr><th>Email </th><td>{{data.email}}</td></tr></tr>
+				<tr><tr><th>DOB </th><td>{{data.dob}}<td></tr></tr>
+				<tr><tr><th>Designation </th><td>{{data.destination}}</td></tr></tr>
+				<tr><tr><th>Department </th><td>{{data.department}}</td></tr></tr>
+				<tr><tr><th>Branch </th><td>{{data.branch}}</td></tr></tr>
+			</table>
+		</div>
+		<div class="col-md-4">
+			<table class="table table-hover table-striped">
+				<tr><tr><th>Joined date </th><td>{{data.joineddate}}</td></tr></tr>
+				<tr><tr><th>Salary </th><td>{{data.salary}}</td></tr></tr>
+				<tr><tr><th>Insurance </th><td>{{data.assurance}}</td></tr></tr>
+				<tr><tr><th>Bank Account No </th><td>{{data.bankaccountno}}</td></tr></tr>
+				<tr><tr><th>Address </th><td>{{data.address}}</td></tr></tr>
+			</table>
+		</div>
+	</div>
+</div>
+<div id="modal_pic" class="modal fade">
+	<div class="modal-dialog text-center">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h5 class="modal-title text-center"><?=($fet['gender']=='Male')?'Mr ':'Mrs '; ?><?=$fet['firstname']." ". $fet['lastname']; ?></h5>
+			</div>
+			<div class="modal-body">
+				<img src="media/{{data.image}}" class="img-rounded img-responsive" />	
+			</div>
+		</div>
+	</div>
+    <div class="row text-center footerr">
+        <ul class="col-md-12 list-unstyled list-inline text-right">
+    <li ><a style="color:white;" href="">Contact us</a>&nbsp;&nbsp;|</li>
+    <li  ><a style="color:white;" href="#">About this software</a>&nbsp;&nbsp;|</li>
+            
+            
+            <li><a style="color:white;" href="">Logout</a></li>
+            </ul>
+    Uwiringiyimana jeannine
+    </div>
+    
+    </div>
+    <script type="text/javascript">
+    $(document).ready(function(){
+    $('.tip').tooltip();
+    var title=$('.active:last').data('title');
+    if (title!=null) {
+    document.title=title;
+    };
+    });
+    </script>
+    </body>
+    </html>
